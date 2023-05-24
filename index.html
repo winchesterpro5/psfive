@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en" manifest="84ciss.manifest">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLAYSTATION 4 FW 9.00 (Ciss84 Host V1.2)</title>
+  <script src="jquery-2.2.4.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      list-style: none;
+      color: white;
+    }
+
+    body {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+      /*background-image: url(../images/bg-dirt-5.png);*/
+      background-size: cover;
+      overflow: hidden;
+      font-family: "Poppins";
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #000000a2, #0000004a);
+    }
+
+    /*--HEADER--*/
+
+    header {
+      position: relative;
+      height: 12vh;
+      width: 100%;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 135px;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+    }
+
+    header .left a {
+      font-size: 2em;
+      font-weight: 100;
+      color: rgb(173, 173, 173);
+    }
+
+    header .left a.jeux {
+      margin-right: 70px;
+      font-weight: 500;
+      color: rgb(255, 255, 255);
+    }
+
+    header .right a,
+    header .right span {
+      font-size: 1.8em;
+      color: #ffffff;
+    }
+
+    header .right {
+      display: flex;
+      align-items: center;
+    }
+
+    header .right a,
+    header .right span {
+      margin-left: 60px;
+      font-weight: 100;
+    }
+
+    header .right i {
+      color: rgb(185, 185, 185);
+    }
+
+    header .right a.profil-pic {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    header .right a.profil-pic img {
+      height: 45px;
+      width: 45px;
+      border-radius: 50px;
+    }
+
+    header .right span.time {
+      margin-left: 100px;
+      letter-spacing: 2px;
+    }
+
+    /*--CAROUSEL GAME SELECTION--*/
+
+    #carousel {
+      position: relative;
+      height: 88vh;
+      top: 0;
+      overflow: hidden;
+    }
+
+    #carousel>div {
+      top: 10px;
+      position: absolute;
+      transition: transform 0.3s ease 0s, left 0.3s ease 0s, opacity 0.3s ease 0s,
+        z-index 0s ease 0s;
+      opacity: 1;
+      width: 85%;
+    }
+
+    #carousel div .carousel-thumbnail img {
+      width: 170px;
+      transition: width 0.3s ease 0s;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    #carousel div .carousel-thumbnail span {
+      position: absolute;
+      top: 125px;
+      width: max-content;
+      font-size: 1.6em;
+      margin-left: 10px;
+      font-weight: 100;
+      color: rgb(223, 223, 223);
+    }
+
+    #carousel div.hideLeft {
+      left: -197px;
+    }
+
+    #carousel div.hideLeft img {
+      width: 110px;
+    }
+
+    #carousel div.hideRight {
+      left: 671px;
+      opacity: 0;
+    }
+
+    #carousel div.hideRight img {
+      width: 110px;
+    }
+
+    #carousel div.prev {
+      z-index: 5;
+      left: 69px;
+    }
+
+    #carousel div.prev img {
+      width: 110px;
+    }
+
+    #carousel div.prevLeftSecond {
+      z-index: 4;
+      left: -64px;
+    }
+
+    #carousel div.prevLeftSecond img {
+      width: 110px;
+    }
+
+    #carousel div.selected {
+      z-index: 0;
+      left: 206px;
+      height: 95%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #carousel div:not(.selected) .game-info {
+      display: none;
+    }
+
+    #carousel div.selected .carousel-thumbnail img {
+      border: 3px solid rgba(255, 0, 0, 0);
+      box-shadow: 0px 0px 0px 3px rgba(228, 228, 228, 0.719);
+    }
+
+    #carousel div:not(.selected) .carousel-thumbnail span {
+      display: none;
+    }
+
+    #carousel div.next {
+      z-index: 5;
+      left: 405px;
+    }
+
+    #carousel div.next img {
+      width: 110px;
+    }
+
+    #carousel div.nextRightSecond {
+      z-index: 5;
+      left: 538px;
+      opacity: 1;
+    }
+
+    #carousel div.nextRightSecond img {
+      width: 110px;
+    }
+
+    #carousel .game-info {
+      margin-bottom: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    #carousel .game-info .left h1 {
+      font-weight: 100;
+      font-size: 1.5em;
+      color: rgb(246, 246, 246);
+      margin: 20px 0 50px 0;
+      max-width: 630px;
+    }
+
+    #carousel .game-info .left .cta-btn {
+      display: flex;
+    }
+
+    #carousel .game-info .left a {
+      font-size: 1.8em;
+      background-color: rgba(202, 202, 202, 0.109);
+      border-radius: 50px;
+    }
+
+    #carousel .game-info .left .play-btn {
+      padding: 12px 120px;
+    }
+
+    #carousel .game-info .left .point-btn {
+      width: 65px;
+      height: 65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: rotate(-90deg);
+      margin-left: 20px;
+    }
+
+    #carousel .game-info.buy-it .left>a {
+      font-size: 1.2em;
+      padding: 5px 15px;
+      font-weight: 100;
+      border: 2px solid white;
+      background-color: transparent;
+      border-radius: 0px;
+    }
+
+    #carousel .game-info.buy-it .left h1 {
+      font-weight: 100;
+      font-size: 3em;
+      text-transform: uppercase;
+      margin: 20px 0px -5px;
+    }
+
+    #carousel .game-info.buy-it .left h2 {
+      font-weight: 100;
+      font-size: 1.6em;
+      text-transform: uppercase;
+    }
+
+    #carousel .game-info.buy-it .left span {
+      display: block;
+      margin: 40px 0 60px 0;
+      font-size: 1.3em;
+      color: #bbbbbb;
+    }
+
+    #carousel .game-info .right {
+      margin-right: 100px;
+    }
+
+    #carousel .game-info .right .big-pic {
+      height: 300px;
+      width: 300px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    #carousel .game-info .right .big-pic::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(to bottom, transparent 45%, #000 85%);
+    }
+
+    #carousel .game-info .big-pic span.jeu-complet {
+      border: 2px solid white;
+      padding: 3px 10px;
+      width: fit-content;
+      z-index: 1;
+      font-size: 0.9em;
+      margin-left: 18px;
+    }
+
+    #carousel .game-info .big-pic span.update {
+      background: white;
+      padding: 2px 6px;
+      width: fit-content;
+      z-index: 1;
+      font-size: 0.9em;
+      margin: 20px 0 20px 18px;
+      color: black;
+      font-weight: 600;
+    }
+
+    #carousel .game-info .big-pic span.price {
+      z-index: 1;
+      margin: 20px 0 20px 18px;
+      color: white;
+      font-weight: 400;
+      font-size: 1.2em;
+    }
+
+    #carousel .game-info .trophee {
+      margin-top: 20px;
+      width: 300px;
+      height: 100px;
+      background-color: rgba(0, 0, 0, 0.589);
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    #carousel .game-info .trophee i {
+      color: #acacac;
+      font-size: 2.4em;
+    }
+
+    #carousel .game-info .trophee .progress,
+    #carousel .game-info .trophee .win {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #carousel .game-info .trophee .progress span:nth-child(1) {
+      color: #d4d4d4;
+      font-weight: 100;
+    }
+
+    #carousel .game-info .trophee .progress span:nth-child(2) {
+      color: #ffffff;
+      font-size: 1.7em;
+      font-weight: 100;
+    }
+
+    #carousel .game-info .trophee .win span:nth-child(1) {
+      color: #d4d4d4;
+      font-weight: 100;
+    }
+
+    #carousel .game-info .trophee .win span:nth-child(2) {
+      color: #ffffff;
+      font-size: 1.7em;
+      font-weight: 100;
+      text-align: right;
+    }
+
+    #carousel #dirt-5-game .game-info .big-pic {
+      background-image: url(../images/game-thumbnail-sackboy.png);
+      background-size: cover;
+    }
+
+    #carousel #yakuza-game .game-info .big-pic {
+      background-image: url(../images/hz4\ extension.jpeg);
+      background-size: cover;
+    }
+
+    #carousel #watch-dogs-game .game-info .big-pic {
+      background-image: url(../images/game-watch-dogs.png);
+      background-size: cover;
+    }
+
+    button {
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: #ADCFFF 0 -7px 6px inset;
+      border: 2px solid black;
+      /*border-radius: 10px 100px / 120px;*/
+      border-radius: 40em;
+      display: inline-table;
+      text-align: center;
+      cursor: pointer;
+      text-align: center;
+      text-transform: uppercase;
+      outline: none;
+      overflow: hidden;
+      position: relative;
+      color: #eeeeee;
+      font-weight: 900%;
+      font-size: -10px;
+      padding: 3px 40px;
+      margin: 0 auto;
+    }
+
+    button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    button:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 700%;
+      width: 160%;
+      background: #79eb2a;
+      -webkit-transition: all 0.5s ease-in-out;
+      transition: all 0.5s ease-in-out;
+      -webkit-transform: translateX(-100%) translateY(-25%) rotate(45deg);
+      transform: translateX(-100%) translateY(-25%) rotate(45deg);
+    }
+
+    button:hover:after {
+      -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+      transform: translateX(-9%) translateY(-25%) rotate(45deg);
+    }
+
+    .notification {
+      display: flex;
+      /*width : 700px;*/
+      height: 55px;
+      top: 10%;
+      right: 2%;
+      position: fixed;
+      background-color: rgba(30, 30, 50, 0.5);
+      color: rgb(255, 255, 255);
+      padding: 0px;
+      border-radius: 30px;
+      box-shadow: 0px 0px 5px;
+      font-weight: Bold;
+      animation: slide 500ms;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes slide {
+      from {
+        transform: translateX(140%);
+      }
+
+      to {
+        transform: translateX(0%);
+      }
+    }
+
+    .notification2 {
+      display: flex;
+      /*width : 700px;*/
+      height: 55px;
+      top: -10%;
+      right: 2%;
+      position: fixed;
+      background-color: rgba(30, 30, 50, 0.5);
+      color: rgb(255, 255, 255);
+      padding: 0px;
+      border-radius: 30px;
+      box-shadow: 0px 0px 5px;
+      font-weight: Bold;
+      animation: slide2 500ms;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes slide2 {
+      from {
+        transform: translateX(0%);
+      }
+
+      to {
+        transform: translateX(140%);
+      }
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 90px;
+      height: 34px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ca2222;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: #2ab934;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(55px);
+      -ms-transform: translateX(55px);
+      transform: translateX(55px);
+    }
+
+    /*------ ADDED CSS ---------*/
+
+    .on {
+      display: none;
+    }
+
+    .on,
+    .off {
+      color: white;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      font-size: 10px;
+      font-family: Verdana, sans-serif;
+    }
+
+    input:checked+.slider .on {
+      display: block;
+    }
+
+    input:checked+.slider .off {
+      display: none;
+    }
+
+    /*--------- END --------*/
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .themes {
+      width: 98%;
+      margin: 0 auto;
+      margin-left: 2%;
+      margin-top: 2%;
+    }
+
+    .theme {
+      background: rgba(0, 0, 0, 0.75);
+      width: 14.1%;
+      text-align: center;
+      display: inline-block;
+      margin-right: 2.5%;
+      margin-bottom: 2.5%;
+    }
+
+    .theme img {
+      width: 100%;
+    }
+
+    .theme span {
+      color: white;
+      display: block;
+      padding: 10px;
+    }
+  </style>
+</head>
+<script src="payload.js"></script>
+<script src="loader.js"></script>
+<script src="kexploit.js"></script>
+
+<body onload="checkGHBLS()">
+  <div id="notify" style="display: none;">
+    <img src="hen.png" alt="" width="100px" height="100px">
+    <p id="log"></p>
+  </div>
+  <header>
+    <div class="left">
+      <a href="#" class="jeux">Host Auto Usb (FW 9.00)</a>
+    </div>
+    <div class="right">
+      <a href="theme.html" target="_blank" rel="noopener noreferrer" class="settings" style="margin-right:45px"><img
+          src="setting.png" alt="" width="50px" height="50px"></a>
+    </div>
+    <div style="font-size: 30px">Pass = <span style="color:green" id=passCounter></span>&nbsp;&nbsp;:&nbsp;&nbsp;Fail =
+      <span style="color:red" id=failCounter></span></div>
+    <div style="margin-right:-95px;font-size:30px"
+      ><span>Firmware-</span> <span id="PS4fw"></span></div>
+  </header>
+  <div id="carousel">
+    <div class="selected">
+      <section class="carousel-thumbnail">
+        <img src="hen2.png">
+        <span>Hen™</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Homebrew Enabler, Enable Debug Settings, PSVR Support,<br>External HDD Support, Remote PKG Installer Support,<br>Full Rest Mode Support, Debug Trophies Support, Enable UART. </h1>
+          <div class="cta-btn">
+            <label class="switch">
+            <input type="checkbox" id="checkbox1" onclick="checkthebox1()">
+            <span class="slider round"><span class="on">AutoLoadPHEN ON</span><span class="off">AutoLoadPHEN OFF</span></span>
+            </label>
+            <button class="play-btn" onclick="loader('platinumhen_2.6.5.bin'); loader2('PlatinumHen-U v2.6.5')" onMouseOver="msgs2.innerHTML='PlatinumHen 2.6.5 Unofficial by 84Ciss'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> Platinum 2.6.5 </span></B></button></a>
+            <button class="play-btn" onclick="loader('goldhen_2.4b13.bin'); loader2('GoldHen 2.4b13')" onMouseOver="msgs2.innerHTML='GoldHEN 2.4b13 by SISTRo'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> GoldHen 2.4b13 </span></B></button></a>
+            <label class="switch">
+            <input type="checkbox" id="checkbox2" onclick="checkthebox2()">
+            <span class="slider round"><span class="on">AutoLoadGHEN ON</span><span class="off">AutoLoadGHEN OFF</span></span>
+            </label>
+         </div>
+        </div>
+        <div class="right">
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span>Version</span>
+              <span>2.6.5</span>
+            </div>
+            <div class="win">
+              <span>Developed</span>
+              <span>By 84Ciss</span>
+            </div>
+          </div>
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span>Version</span>
+              <span>2.4B13</span>
+            </div>
+            <div class="win">
+              <span>Developed</span>
+              <span>By SISTRo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hideLeft">
+      <section class="carousel-thumbnail">
+      <img src="orbis.png" id="spider-man">
+        <span>Orbis ToolBox</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Orbis Toolbox additional option dex. </h1>
+          <div class="cta-btn">
+          <button class="play-btn" onclick="loader('Orbis_Toolbox.bin'); loader2('Orbis-Toolbox !!!')" onMouseOver="msgs2.innerHTML='add Option Debug feature'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>  Orbis toolbox </span></B></button></a>
+         </div>
+        </div>
+        <div class="right">
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="win">
+              <span>Developed</span>
+              <span>By OSM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prevLeftSecond">
+      <section class="carousel-thumbnail">
+        <img src="mod.png" id="demons-souls">
+        <span>Mods Menu</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Select you Menu mod for Rdr2 !! (Oysters 1.29).</h1>
+          <div class="cta-btn">
+            <button class="play-btn" onclick="loader('RDR2_Oysters_Menu_1.29.bin'); loader2('RDR II OystersMod 1.29(1.3.8)')" onMouseOver="msgs2.innerHTML='Rdr2 Oysters Mod Menu(1.3.8) for 1.29'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>Oysters</span></B></button></a>
+          </div>
+          <h1>Select you Menu mod for GtaV !! (Beach 1.46, Beef_Queef 1.38, Explulsion 1.38, Lamance 1.38).</h1>
+          <div class="cta-btn">
+            <button class="play-btn" onclick="loader('Beach_1.46.bin'); loader2('GtaV Beach Mod 1.46 v1.4')" onMouseOver="msgs2.innerHTML='Gta V Lamance Mod Menu v1.0 1.38 By @David'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>Beach</span></B></button></a>
+            <button class="play-btn" onclick="loader('Beef_Queef_Mod_1.38.bin'); loader2('GtaV Beefqueef Mod Menu 1.38d')" onMouseOver="msgs2.innerHTML='Gta V BeefQueef Mod Menu 1.38d'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>BeefQueef</span></B></button></a>
+            <button class="play-btn" onclick="loader('Expulsion_1.46.bin'); loader2('GtaV Expulsion Mod 1.38v4')" onMouseOver="msgs2.innerHTML='Gta V Expulsion Mod Menu 1.38 V4.0'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>Expulsion</span></B></button></a>
+            <button class="play-btn" onclick="loader('Lamance_1.38.bin'); loader2('GtaV Lamace Mod 1.38 v1.0')" onMouseOver="msgs2.innerHTML='Gta V Lamance Mod Menu v1.0 1.38 By @David'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span>Lamance</span></B></button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prev">
+      <section class="carousel-thumbnail">
+        <img src="pkg.png" id="yakuza">
+        <span>Pkg</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Backup or dump pkg to usb storage.</h1>
+          <div class="cta-btn">
+            <button class="play-btn" onclick="loader('Pkg_Backup.bin'); loader2('Load your game!!! Backup Pkg v1.1')" onMouseOver="msgs2.innerHTML='Backup Pkg to Usb v1.1'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> Backup Pkg </span></B></button></a>
+            <button class="play-btn" onclick="loader('Game_Dumper.bin'); loader2('Dumper v2')" onMouseOver="msgs2.innerHTML='Dump Games to a USB drive to be able to create fpkg files'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> Dumper Game </span></B></button></a>
+         </div>
+        </div>
+        <div class="right">
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span></span>
+              <span>Backup & dump pkg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="next">
+      <section class="carousel-thumbnail">
+        <img src="db.png" id="XIII">
+        <span>Backup | Restore</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Backup or restore DB files with usb stick.</h1>
+          <div class="cta-btn">
+            <button class="play-btn" onclick="loader('Backup.bin'); loader2('Backup DB')" onMouseOver="msgs2.innerHTML='DB Backup'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> D-B Backup </span></B></button></a>
+            <button class="play-btn" onclick="loader('Restore.bin'); loader2('restore DB')" onMouseOver="msgs2.innerHTML='DB Restore'" ; onmouseout="msgs2.innerHTML='∆❍X❑'" type="button"><B><span> D-B Restore </span></B></button></a>
+         </div>
+        </div>
+        <div class="right">
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span></span>
+              <span>Backup & restore</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nextRightSecond">
+      <section class="carousel-thumbnail">
+        <img src="linux.png" id="XIII">
+        <span>Linux</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Select Linux 4GB fat/Slim or Pro.</h1>
+          <div class="cta-btn">
+          <button class="play-btn" onclick=loadlinux() type="button"><B><span>Linux Loader</span></B></button></a>
+          <label class="switch" >
+          <input type="checkbox" id="checkbox3" onclick="checkthebox3()">
+          <span class="slider round"><span class="on">Phat ON</span><span class="off">Pro ON</span></span>
+          </label>
+         </div>
+        </div>
+        <div class="right">
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span>Version</span>
+              <span>4 GB VRAM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hideRight">
+      <section class="carousel-thumbnail">
+        <img src="hen2.png" id="watch">
+        <span>BinLoader</span>
+      </section>
+      <div class="game-info">
+        <div class="left">
+          <img src="">
+          <h1>Send A Payload To Port 9020.</h1>
+          <div class="cta-btn">
+          <button class="play-btn" onclick=load_bin() type="button"><B><span>BinLoader</span></B></button></a>
+          </div>
+        </div>
+          <div class="trophee">
+            <img src="trophy.png" alt="" width="50px" height="50px">
+            <div class="progress">
+              <span>Version</span>
+              <span>9.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function moveToSelected(element) {
+
+      if (element == "next") {
+        var selected = $(".selected").next();
+      } else if (element == "prev") {
+        var selected = $(".selected").prev();
+      } else {
+        var selected = element;
+      }
+
+      var next = $(selected).next();
+      var prev = $(selected).prev();
+      var prevSecond = $(prev).prev();
+      var nextSecond = $(next).next();
+
+      $(selected).removeClass().addClass("selected");
+
+      $(prev).removeClass().addClass("prev");
+      $(next).removeClass().addClass("next");
+
+      $(nextSecond).removeClass().addClass("nextRightSecond");
+      $(prevSecond).removeClass().addClass("prevLeftSecond");
+
+      $(nextSecond).nextAll().removeClass().addClass('hideRight');
+      $(prevSecond).prevAll().removeClass().addClass('hideLeft');
+
+    }
+
+    // Eventos teclado
+    $(document).keydown(function (e) {
+      switch (e.which) {
+        case 37: // left
+          moveToSelected('prev');
+          break;
+
+        case 39: // right
+          moveToSelected('next');
+          break;
+
+        default: return;
+      }
+      e.preventDefault();
+    });
+
+    $('#carousel > div').click(function () {
+      moveToSelected($(this));
+    });
+
+  </script>
+  <script>
+    $('#sackboy').on('click', function () {
+      $('body').css('background-image', 'url(1.jpg)');
+    });
+    $('#spider-man').on('click', function () {
+      $('body').css('background-image', 'url(2.jpg)');
+    });
+    $('#demons-souls').on('click', function () {
+      $('body').css('background-image', 'url(3.jpg)');
+    });
+    $('#dirt-5').on('click', function () {
+      $('body').css('background-image', 'url(1.jpg)');
+    });
+    $('#yakuza').on('click', function () {
+      $('body').css('background-image', 'url(2.jpg)');
+    });
+    $('#XIII').on('click', function () {
+      $('body').css('background-image', 'url(3.jpg)');
+    });
+    $('#watch-dogs').on('click', function () {
+      $('body').css('background-image', 'url(1.jpg)');
+    });  
+  </script>
+  <script>
+    // Onload Check
+    var firstcheck = localStorage.getItem("CheckBOX1")
+    if (firstcheck == "true") {
+      document.getElementById("checkbox1").checked = true
+    } else {
+      document.getElementById("checkbox1").checked = false
+    }
+    var secondcheck = localStorage.getItem("CheckBOX2")
+    if (secondcheck == "true") {
+      document.getElementById("checkbox2").checked = true
+    } else {
+      document.getElementById("checkbox2").checked = false
+    }
+    // Button Event
+    function checkthebox1() {
+      var chkBox = document.getElementById("checkbox1")
+      if (chkBox.checked == true) {
+        var checkbox_on = document.getElementById("checkbox1").checked = true
+        localStorage.setItem("CheckBOX1", checkbox_on)
+        LoadedMSG = "PlatinumHEN Auto ON  !!!";
+        autopl();
+      } else if (chkBox.checked == false) {
+        var checkbox_off = document.getElementById("checkbox1").checked = false
+        localStorage.setItem("CheckBOX1", checkbox_off)
+        LoadedMSG = "PlatinumHEN Auto OFF !!!";
+        autopl();
+      }
+    }
+    function checkthebox2() {
+      var chkBox = document.getElementById("checkbox2")
+      if (chkBox.checked == true) {
+        var checkbox_on = document.getElementById("checkbox2").checked = true
+        localStorage.setItem("CheckBOX2", checkbox_on)
+        LoadedMSG = "GoldHEN Auto ON  !!!";
+        autopl();
+      } else if (chkBox.checked == false) {
+        var checkbox_off = document.getElementById("checkbox2").checked = false
+        localStorage.setItem("CheckBOX2", checkbox_off)
+        LoadedMSG = "GoldHEN Auto OFF  !!!";
+        autopl();
+      }
+    }
+
+    var thirdcheck = localStorage.getItem("CheckBOX3")
+    if (thirdcheck == "true") {
+      document.getElementById("checkbox3").checked = true
+    } else {
+      document.getElementById("checkbox3").checked = false
+    }
+
+    function checkthebox3() {
+      var chkBox = document.getElementById("checkbox3")
+      if (chkBox.checked == true) {
+        var checkbox_on = document.getElementById("checkbox3").checked = true
+        localStorage.setItem("CheckBOX3", checkbox_on)
+        LoadedMSG = "Linux for PS4 Phat ON  !!!";
+        autopl();
+      } else if (chkBox.checked == false) {
+        var checkbox_off = document.getElementById("checkbox3").checked = false
+        localStorage.setItem("CheckBOX3", checkbox_off)
+        LoadedMSG = "Linux for PS4 Pro ON  !!!";
+        autopl();
+      }
+    }
+
+    function loadlinux() {
+      var get = localStorage.getItem("CheckBOX3")
+      if (get == "true") {
+        loader('Linux_4gb_Phat.bin'); loader2('Linux 4G Phat')
+      } else {
+        loader('Linux_4gb_Pro.bin'); loader2('Linux 4G Pro')
+      }
+    }
+  </script>
+  <script>
+    UA = navigator.userAgent.substring(navigator.userAgent.indexOf("6.72 (") + 28, navigator.userAgent.indexOf(") Apple"));
+    if (UA == "layStation 4/9.00") UA = "9.00";
+    if (UA == "layStation 4/10.50") UA = "10.50";
+    if (UA != "9.00" && UA != "10.50") alert("This Is For PS4 FW9.00 Only!");
+    PS4fw.innerHTML = "" + UA + "";
+  </script>
+  <script type="text/javascript">
+    if (localStorage.getItem("theme") == null) {
+      localStorage.setItem("theme", "1.jpg")
+    }
+    document.body.style.background = "url('" + localStorage.getItem("theme") + "')"
+    document.body.style.backgroundSize = "cover"
+    var imgs = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"];
+    render()
+    function render() {
+      document.querySelector(".themes").innerHTML = ""
+      for (let i = 0; i < imgs.length; i++) {
+        var selectText = "Select"
+        var textColor = "white"
+        if (localStorage.theme == imgs[i]) {
+          selectText = "Selected"
+          textColor = "green"
+        }
+        document.querySelector(".themes").innerHTML += '<div class="theme" ><img src="' + imgs[i] + '" ><span style="color:' + textColor + ';" onclick="set(' + i + ')">' + selectText + '</span></div>';
+      }
+    }
+    function set(i) {
+      localStorage.setItem("theme", imgs[i])
+      render()
+      document.body.style.background = "url('" + imgs[i] + "')"
+      document.body.style.backgroundSize = "cover"
+    }
+  </script>
+  <script>
+    if (localStorage.passcount == null || localStorage.passcount == undefined) localStorage.passcount = 0;
+    if (localStorage.passCounter == null || localStorage.passCounter == undefined) {
+      passCounter.innerHTML = localStorage.passcount;
+    }
+    if (localStorage.failcount == null || localStorage.failcount == undefined) localStorage.failcount = 0;
+    if (localStorage.failCounter == null || localStorage.failCounter == undefined) {
+      failCounter.innerHTML = localStorage.failcount;
+    }
+  </script>
+</body>
+
+</html>
